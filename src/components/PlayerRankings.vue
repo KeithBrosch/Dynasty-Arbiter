@@ -1,30 +1,54 @@
 <script setup lang="ts">
 import supabase from '../utlis/supabaseClient.js'
+import { ref } from 'vue'
 
-let ktcValues = []
-let fcValues = []
+let ktcValues = ref([])
+let fcValues = ref([])
 
 const getKTCPlayerValues = async function () {
-  const { data, error } = await supabase.from(import.meta.env.VITE_SUPABASE_KTC_DB_NAME).select()
+  const { data, error } = await supabase.from(import.meta.env.VITE_SUPABASE_KTC_DB_NAME).select('*')
 
   if (error) console.error(error)
-  if (data) this.ktcValues = data
+  if (data) {
+    ktcValues.value = data
+  }
 }
 
 const getFCPlayerValues = async function () {
-  const { data, error } = await supabase.from(import.meta.env.VITE_SUPABASE_FC_DB_NAME).select()
+  const { data, error } = await supabase.from(import.meta.env.VITE_SUPABASE_FC_DB_NAME).select('*')
 
   if (error) console.error(error)
-  if (data) this.fcValues = data
+  if (data) {
+    fcValues.value = data
+  }
 }
 
+// todo: add loading overlay
 getKTCPlayerValues()
 getFCPlayerValues()
 </script>
 
 <template>
   <h1>Player Rankings</h1>
-  {{ ktc_values }}
-  <br />
-  {{ fc_values }}
+  <div class="columns">
+    <p>
+      <h3>KTC Rankings</h3>
+      {{ ktcValues }}
+    </p>
+    <p>
+      <h3>FC Rankings</h3>
+      {{ fcValues }}
+    </p>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+h1 {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.columns {
+  display: flex;
+  gap: 50px;
+}
+</style>
