@@ -3,8 +3,10 @@ import { defineProps, computed, ref } from 'vue'
 
 const props = defineProps(['ktcValues', 'fcValues'])
 
+const sortAttribute = ref('diff')
+
 const combinedPlayerObjects = computed(() => {
-  const combinedArray = []
+  let combinedArray = []
   // Merge objects from array1 with matching objects from ktcValues
   props.fcValues.forEach((obj1) => {
     let obj2 = props.ktcValues.find((obj2) => obj1.fc_player_name === obj2.ktc_player_name)
@@ -38,7 +40,25 @@ const combinedPlayerObjects = computed(() => {
     }
   })
 
-  return combinedArray
+  combinedArray.forEach((player) => {
+    player.diff = player.ktc_player_value - player.fc_player_value
+  })
+
+  // filter out draft picks
+  combinedArray = combinedArray.filter(
+    (player) =>
+      player.fc_player_age !== '' &&
+      player.ktc_player_age !== '' &&
+      player.ktc_player_age !== 'PICK'
+  )
+
+  return combinedArray.sort((a, b) =>
+    a[sortAttribute.value] > b[sortAttribute.value]
+      ? 1
+      : b[sortAttribute.value] > a[sortAttribute.value]
+        ? -1
+        : 0
+  )
 })
 </script>
 
@@ -51,12 +71,28 @@ const combinedPlayerObjects = computed(() => {
       <th>FC Value</th>
       <th>Diff</th>
     </tr>
-    <tr v-for="player in combinedPlayerObjects" :key="player_id">
+    <tr v-for="player in combinedPlayerObjects" :key="player.player_id">
       <td>{{ player.fc_player_name || player.ktc_player_name }}</td>
       <td>{{ player.fc_player_age || player.ktc_player_age }}</td>
       <td>{{ player.ktc_player_value || 0 }}</td>
       <td>{{ player.fc_player_value || 0 }}</td>
-      <td>{{ player.ktc_player_value - player.fc_player_value || null }}</td>
+      <td>{{ player.diff }}</td>
     </tr>
   </table>
 </template>
+
+<style lang="scss" scoped>
+table {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  border-collapse: collapse;
+  th,
+  td {
+    padding: 5px 10px;
+    border: 1px solid black;
+  }
+  th {
+    background: #ff7eee;
+  }
+}
+</style>
