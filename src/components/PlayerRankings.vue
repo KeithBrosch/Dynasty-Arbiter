@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import supabase from '../utlis/supabaseClient.js'
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+
+const isLoading = ref(true)
+const $loading = inject('$loading')
+const loader = $loading.show()
 
 let ktcValues = ref([])
 let fcValues = ref([])
@@ -26,11 +30,13 @@ const getFCPlayerValues = async function () {
 // todo: add loading overlay
 getKTCPlayerValues()
 getFCPlayerValues()
+loader.hide()
+isLoading.value = false
 </script>
 
 <template>
   <h1>Player Rankings</h1>
-  <div class="columns">
+  <div v-show="fcValues.length && ktcValues.length && !isLoading" class="columns">
     <p>
       <h3>KTC Rankings</h3>
       {{ ktcValues }}
