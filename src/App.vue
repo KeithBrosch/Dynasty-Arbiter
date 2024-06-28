@@ -8,7 +8,6 @@ import SideNav from './components/SideNav.vue'
     <main>
       <router-view />
     </main>
-    <!-- <LoadingOverlay :isLoading="isLoading" /> -->
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import supabase from '../utlis/supabaseClient.js'
 import { ref, inject } from 'vue'
+import PlayersTable from './PlayersTable.vue'
 
 const isLoading = ref(true)
 const $loading = inject('$loading')
@@ -36,25 +37,16 @@ isLoading.value = false
 
 <template>
   <h1>Player Rankings</h1>
-  <div v-show="fcValues.length && ktcValues.length && !isLoading" class="columns">
-    <p>
-      <h3>KTC Rankings</h3>
-      {{ ktcValues }}
-    </p>
-    <p>
-      <h3>FC Rankings</h3>
-      {{ fcValues }}
-    </p>
-  </div>
+  <PlayersTable
+    v-show="fcValues.length && ktcValues.length && !isLoading"
+    :ktcValues="ktcValues"
+    :fcValues="fcValues"
+  />
 </template>
 
 <style lang="scss" scoped>
 h1 {
   text-align: center;
   margin-bottom: 50px;
-}
-.columns {
-  display: flex;
-  gap: 50px;
 }
 </style>
