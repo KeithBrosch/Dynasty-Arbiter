@@ -9,7 +9,10 @@ const combinedPlayerObjects = computed(() => {
   let combinedArray = []
   // Merge objects from array1 with matching objects from ktcValues
   props.fcValues.forEach((obj1) => {
-    let obj2 = props.ktcValues.find((obj2) => obj1.fc_player_name === obj2.ktc_player_name)
+    let obj2 = props.ktcValues.find(
+      (obj2) =>
+        obj1.fc_player_name.toLowerCase().trim() === obj2.ktc_player_name.toLowerCase().trim()
+    )
     combinedArray.push({
       ...obj1,
       ...(obj2 || {
@@ -26,7 +29,11 @@ const combinedPlayerObjects = computed(() => {
 
   // Add objects from ktcValues that are not in fcValues
   props.ktcValues.forEach((obj2) => {
-    let obj1 = props.fcValues.find((obj1) => obj1.fc_player_name === obj2.ktc_player_name)
+    // this name match needs to account for different naming conventions between ktcc and fc. solution for now is just to hard code
+    let obj1 = props.fcValues.find(
+      (obj1) =>
+        obj1.fc_player_name.toLowerCase().trim() === obj2.ktc_player_name.toLowerCase().trim()
+    )
     if (!obj1) {
       combinedArray.push({
         id: null,
@@ -53,9 +60,9 @@ const combinedPlayerObjects = computed(() => {
   )
 
   return combinedArray.sort((a, b) =>
-    a[sortAttribute.value] > b[sortAttribute.value]
+    a[sortAttribute.value] < b[sortAttribute.value]
       ? 1
-      : b[sortAttribute.value] > a[sortAttribute.value]
+      : b[sortAttribute.value] < a[sortAttribute.value]
         ? -1
         : 0
   )

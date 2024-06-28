@@ -15,6 +15,20 @@ const getKTCPlayerValues = async function () {
 
   if (error) console.error(error)
   if (data) {
+    // manipulate player names to make matching easier later
+    data.forEach((player) => {
+      player.ktc_player_name = player.ktc_player_name.replace('Jr.', '')
+      player.ktc_player_name = player.ktc_player_name.replace('III', '')
+      player.ktc_player_name = player.ktc_player_name.replace('Gabriel Davis', 'Gabe Davis')
+      player.ktc_player_name = player.ktc_player_name.replace('Joshua Palmer', 'Josh Palmer')
+      player.ktc_player_name = player.ktc_player_name.replace('D.J. Moore', 'DJ Moore')
+      player.ktc_player_name = player.ktc_player_name.replace('D.J. Chark', 'DJ Chark')
+      player.ktc_player_name = player.ktc_player_name.replace('Hollywood Brown', 'Marquise Brown')
+      player.ktc_player_name = player.ktc_player_name.replace(
+        'Marvin Harrison Jr',
+        'Marvin Harrison'
+      )
+    })
     ktcValues.value = data
   }
 }
@@ -24,6 +38,17 @@ const getFCPlayerValues = async function () {
 
   if (error) console.error(error)
   if (data) {
+    // manipulate player names to make matching easier later
+    data.forEach((player) => {
+      player.fc_player_name = player.fc_player_name.replace('Jr.', '')
+      player.fc_player_name = player.fc_player_name.replace('III', '')
+      player.fc_player_name = player.fc_player_name.replace('Gabriel Davis', 'Gabe Davis')
+      player.fc_player_name = player.fc_player_name.replace('Joshua Palmer', 'Josh Palmer')
+      player.fc_player_name = player.fc_player_name.replace('D.J. Moore', 'DJ Moore')
+      player.fc_player_name = player.fc_player_name.replace('D.J. Chark', 'DJ Chark')
+      player.fc_player_name = player.fc_player_name.replace('Hollywood Brown', 'Marquise Brown')
+      player.fc_player_name = player.fc_player_name.replace('Marvin Harrison Jr', 'Marvin Harrison')
+    })
     fcValues.value = data
   }
 }
